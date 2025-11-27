@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SBI Credit Card Progress</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #0a3d91, #0048ba);
+      color: #fff;
+    }
+    .container {
+      text-align: center;
+      background: #ffffff;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      width: 420px;
+      color: #002f6c;
+    }
+    .logo {
+      width: 140px;
+      height: auto;
+      margin-bottom: 20px;
+    }
+    h2 {
+      color: #002f6c;
+      margin-bottom: 10px;
+    }
+    p {
+      color: #555;
+      font-size: 14px;
+    }
+    .progress-container {
+      width: 100%;
+      background: #e6eef9;
+      border-radius: 30px;
+      overflow: hidden;
+      margin-top: 25px;
+      border: 1px solid #cdd9f0;
+    }
+    .progress-bar {
+      height: 28px;
+      width: 0;
+      background: linear-gradient(90deg, #0078d7, #00a0e3);
+      transition: width 0.5s linear;
+    }
+    .percent {
+      font-size: 24px;
+      font-weight: bold;
+      margin-top: 15px;
+      color: #0078d7;
+    }
+    .time-remaining {
+      font-size: 13px;
+      color: #444;
+      margin-top: 5px;
+    }
+    .footer-note {
+      font-size: 12px;
+      color: #777;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- SBI Style Logo -->
+    <img src="sbi.png" alt="SBI Card Logo" class="logo">
+
+    <h2>Processing Your Request...</h2>
+    <p>Please wait while we complete the process. This will take about 5 minutes.</p>
+
+    <div class="progress-container">
+      <div id="progressBar" class="progress-bar"></div>
+    </div>
+    <div class="percent" id="percent">0%</div>
+    <div class="time-remaining" id="remaining">5:00 remaining</div>
+
+    <div class="footer-note">© 2025 SBI Cards and Payment Services Ltd.</div>
+  </div>
+
+  <script>
+    const progressBar = document.getElementById('progressBar');
+    const percentEl = document.getElementById('percent');
+    const remainingEl = document.getElementById('remaining');
+    const duration = 5 * 60 * 1000; // 5 minutes
+
+    let start = Date.now();
+    function updateProgress() {
+      let elapsed = Date.now() - start;
+      let progress = Math.min(elapsed / duration, 1);
+      let percentage = Math.floor(progress * 100);
+      progressBar.style.width = percentage + '%';
+      percentEl.textContent = percentage + '%';
+
+      let remaining = duration - elapsed;
+      let minutes = Math.floor(remaining / 60000);
+      let seconds = Math.floor((remaining % 60000) / 1000);
+      if (remaining < 0) {
+        minutes = 0; seconds = 0;
+      }
+      remainingEl.textContent = `${minutes}:${seconds.toString().padStart(2,'0')} remaining`;
+
+      if (progress < 1) {
+        requestAnimationFrame(updateProgress);
+      } else {
+        remainingEl.textContent = 'Complete';
+      }
+    }
+
+    requestAnimationFrame(updateProgress);
+  </script>
+</body>
+</html>
